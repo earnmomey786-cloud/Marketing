@@ -19,6 +19,8 @@ El proyecto actualmente tiene:
 - ✅ Diseño responsive para todos los dispositivos
 - ✅ Cursor grab/grabbing en modo arrastre
 - ✅ Respeto por prefers-reduced-motion
+- ✅ **Pantalla de rotación para móviles**: Video que indica girar el dispositivo a horizontal
+- ✅ **Texto overlay en primera pantalla**: Imagen con mensaje "Nie nudź jak wszyscy - Bądź zajebisty!"
 
 ## Arquitectura Técnica
 
@@ -30,10 +32,17 @@ El proyecto actualmente tiene:
 - **Fuentes**: Montserrat e Inter de Google Fonts
 
 ### Estructura de Pantallas
-1. **Pantalla 1**: Imagen 1_1760514742498.png
+1. **Pantalla 1**: Imagen 1_1760514742498.png + Texto overlay (zajebistymarketing_1760541934438.png)
 2. **Pantalla 2**: Imagen 2_1760514742498.png  
 3. **Pantalla 3**: Imagen 3_1760514742498.png
 4. **Pantalla 4**: Imagen 4_1760514742497.png
+
+### Pantalla de Rotación (Solo Móvil)
+- **Condición**: Se muestra cuando el dispositivo es móvil (≤768px) Y está en orientación vertical
+- **Video**: mueveelmovil_1760542616133.mp4
+- **Comportamiento**: Loop automático hasta que el usuario gire el dispositivo a horizontal
+- **Detección**: Usa window.innerHeight > window.innerWidth para detectar portrait
+- Al girar a landscape, automáticamente se muestra la web principal
 
 ### Características de Navegación
 - **Desktop**: 
