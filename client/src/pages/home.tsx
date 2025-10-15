@@ -18,8 +18,10 @@ export default function Home() {
   const [currentScreen, setCurrentScreen] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
   const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+  const touchCurrentX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function Home() {
   const goToScreen = useCallback((index: number) => {
     if (index >= 0 && index < screens.length && !isTransitioning) {
       setIsTransitioning(true);
+      setDragOffset(0); // Reset drag offset cuando navegamos
       setCurrentScreen(index);
       setTimeout(() => setIsTransitioning(false), 700);
     }
@@ -61,23 +64,106 @@ export default function Home() {
   }, [currentScreen, goToScreen]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isTransitioning) return;
     touchStartX.current = e.touches[0].clientX;
+    touchCurrentX.current = e.touches[0].clientX;
+    setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
+    if (!isDragging || isTransitioning) return;
+    
+    touchCurrentX.current = e.touches[0].clientX;
+    const diff = touchCurrentX.current - touchStartX.current;
+    
+    // Aplicar resistencia en los bordes
+    let offset = diff;
+    if (currentScreen === 0 && diff > 0) {
+      // Resistencia en el borde izquierdo
+      offset = diff * 0.3;
+    } else if (currentScreen === screens.length - 1 && diff < 0) {
+      // Resistencia en el borde derecho
+      offset = diff * 0.3;
+    }
+    
+    setDragOffset(offset);
   };
 
   const handleTouchEnd = () => {
-    const swipeThreshold = 50;
-    const diff = touchStartX.current - touchEndX.current;
+    if (!isDragging) return;
+    
+    setIsDragging(false);
+    const diff = touchCurrentX.current - touchStartX.current;
+    const swipeThreshold = 75; // Umbral para cambiar de pantalla
+    const velocity = Math.abs(diff);
 
-    if (Math.abs(diff) > swipeThreshold) {
-      if (diff > 0) {
+    if (velocity > swipeThreshold) {
+      if (diff < 0 && currentScreen < screens.length - 1) {
+        // Swipe izquierda - siguiente pantalla
         nextScreen();
-      } else {
+      } else if (diff > 0 && currentScreen > 0) {
+        // Swipe derecha - pantalla anterior
         prevScreen();
+      } else {
+        // No se puede navegar, volver a la posición original
+        setDragOffset(0);
       }
+    } else {
+      // Swipe muy corto, volver a la posición original
+      setDragOffset(0);
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isTransitioning) return;
+    e.preventDefault();
+    touchStartX.current = e.clientX;
+    touchCurrentX.current = e.clientX;
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || isTransitioning) return;
+    
+    touchCurrentX.current = e.clientX;
+    const diff = touchCurrentX.current - touchStartX.current;
+    
+    // Aplicar resistencia en los bordes
+    let offset = diff;
+    if (currentScreen === 0 && diff > 0) {
+      offset = diff * 0.3;
+    } else if (currentScreen === screens.length - 1 && diff < 0) {
+      offset = diff * 0.3;
+    }
+    
+    setDragOffset(offset);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    
+    setIsDragging(false);
+    const diff = touchCurrentX.current - touchStartX.current;
+    const swipeThreshold = 75;
+    const velocity = Math.abs(diff);
+
+    if (velocity > swipeThreshold) {
+      if (diff < 0 && currentScreen < screens.length - 1) {
+        nextScreen();
+      } else if (diff > 0 && currentScreen > 0) {
+        prevScreen();
+      } else {
+        setDragOffset(0);
+      }
+    } else {
+      setDragOffset(0);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      setDragOffset(0);
     }
   };
 
@@ -161,19 +247,25 @@ export default function Home() {
   return (
     <div 
       ref={containerRef}
-      className="relative w-screen h-screen overflow-hidden animate-in fade-in duration-500"
+      className="relative w-screen h-screen overflow-hidden animate-in fade-in duration-500 select-none cursor-grab active:cursor-grabbing"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
     >
       <div 
         className="flex h-full"
         style={{
           width: `${screens.length * 100}vw`,
-          transform: `translateX(-${currentScreen * 100}vw)`,
+          transform: `translateX(calc(-${currentScreen * 100}vw + ${dragOffset}px))`,
           transition: prefersReducedMotion 
             ? 'none' 
-            : 'transform 700ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+            : isDragging 
+              ? 'none' 
+              : 'transform 700ms cubic-bezier(0.4, 0.0, 0.2, 1)',
         }}
       >
         {screens.map((screen) => (

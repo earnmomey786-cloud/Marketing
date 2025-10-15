@@ -11,10 +11,13 @@ El proyecto actualmente tiene:
 - ✅ Imágenes de fondo a pantalla completa
 - ✅ Controles de navegación (flechas laterales)
 - ✅ Indicadores de progreso (dots en la parte inferior)
-- ✅ Soporte para gestos táctiles en móviles
+- ✅ **Arrastre fluido con dedo/mouse**: La pantalla sigue el movimiento del dedo en tiempo real
+- ✅ **Efecto de resistencia en bordes**: Feedback visual cuando no puedes avanzar más
 - ✅ Navegación con teclado (flechas izquierda/derecha)
-- ✅ Transiciones animadas suaves
+- ✅ Navegación con scroll del mouse (vertical/horizontal)
+- ✅ Transiciones animadas suaves (700ms)
 - ✅ Diseño responsive para todos los dispositivos
+- ✅ Cursor grab/grabbing en modo arrastre
 - ✅ Respeto por prefers-reduced-motion
 
 ## Arquitectura Técnica
@@ -33,10 +36,21 @@ El proyecto actualmente tiene:
 4. **Pantalla 4**: Imagen 4_1760514742497.png
 
 ### Características de Navegación
-- **Desktop**: Flechas laterales, teclas de flecha, scroll horizontal con mouse
-- **Mobile**: Gestos de swipe táctiles
-- **Todos**: Indicadores de progreso (dots) en la parte inferior
-- **Transiciones**: 700ms con easing cubic-bezier(0.4, 0.0, 0.2, 1)
+- **Desktop**: 
+  - Arrastre con mouse (click y arrastrar)
+  - Flechas laterales (botones visuales)
+  - Teclas de flecha izquierda/derecha
+  - Scroll con rueda del mouse (vertical/horizontal)
+- **Mobile**: 
+  - Arrastre táctil fluido (swipe con seguimiento en tiempo real)
+  - La pantalla sigue el dedo mientras arrastras
+- **Todos**: 
+  - Indicadores de progreso (dots) en la parte inferior
+  - Efecto de resistencia (rubber band) en los bordes
+  - Umbral de 75px para cambiar de pantalla
+- **Transiciones**: 
+  - Durante arrastre: Sin transición (sigue el dedo)
+  - Al soltar: 700ms con easing cubic-bezier(0.4, 0.0, 0.2, 1)
 
 ## Próximos Pasos Planeados
 El sitio está preparado para:
