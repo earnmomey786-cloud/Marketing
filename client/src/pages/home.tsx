@@ -207,7 +207,7 @@ export default function Home() {
         </Button>
       )}
 
-      <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-3 md:gap-4">
+      <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-3 md:gap-4 items-center px-6 py-3 rounded-full bg-black/20 backdrop-blur-sm">
         {screens.map((screen, index) => (
           <button
             key={screen.id}
@@ -215,8 +215,8 @@ export default function Home() {
             disabled={isTransitioning}
             className={`transition-all duration-300 rounded-full ${
               currentScreen === index
-                ? 'w-10 md:w-12 h-3 md:h-4 bg-white'
-                : 'w-3 md:w-4 h-3 md:h-4 bg-white/50 hover:bg-white/70'
+                ? 'w-10 md:w-12 h-3 md:h-4 bg-white shadow-lg shadow-white/30'
+                : 'w-3 md:w-4 h-3 md:h-4 bg-white/50 hover:bg-white/70 hover:scale-110'
             }`}
             aria-label={`Ir a pantalla ${index + 1}`}
             aria-current={currentScreen === index ? 'true' : 'false'}
@@ -225,8 +225,12 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 text-white/80 text-sm font-light">
-        <span className="font-medium">{currentScreen + 1}</span> / {screens.length}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
+        <span className="text-white text-sm font-light">
+          <span className="font-semibold">{currentScreen + 1}</span>
+          <span className="text-white/60 mx-1">/</span>
+          <span className="text-white/80">{screens.length}</span>
+        </span>
       </div>
     </div>
   );
