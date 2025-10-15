@@ -7,7 +7,6 @@ import image2 from '@assets/2_1760514742498.png';
 import image3 from '@assets/3_1760514742498.png';
 import image4 from '@assets/4_1760514742497.png';
 import textOverlay from '@assets/zajebistymarketing_1760541934438.png';
-import rotateVideo from '@assets/mueveelmovil_1760542616133.mp4';
 
 const screens = [
   { id: 1, image: image1, alt: 'Pantalla 1' },
@@ -22,12 +21,9 @@ export default function Home() {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
-  const [isPortrait, setIsPortrait] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const touchStartX = useRef(0);
   const touchCurrentX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -47,32 +43,6 @@ export default function Home() {
     loadImages();
   }, []);
 
-  useEffect(() => {
-    const checkOrientation = () => {
-      const portrait = window.innerHeight > window.innerWidth;
-      const mobile = window.innerWidth <= 768;
-      setIsPortrait(portrait);
-      setIsMobile(mobile);
-    };
-
-    checkOrientation();
-
-    window.addEventListener('resize', checkOrientation);
-    window.addEventListener('orientationchange', checkOrientation);
-
-    return () => {
-      window.removeEventListener('resize', checkOrientation);
-      window.removeEventListener('orientationchange', checkOrientation);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isMobile && isPortrait && videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.log('Video autoplay blocked:', error);
-      });
-    }
-  }, [isMobile, isPortrait]);
 
   const goToScreen = useCallback((index: number) => {
     if (index >= 0 && index < screens.length && !isTransitioning) {
@@ -272,23 +242,6 @@ export default function Home() {
           <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin" />
           <p className="text-white/70 font-light text-sm">Cargando experiencia...</p>
         </div>
-      </div>
-    );
-  }
-
-  if (isMobile && isPortrait) {
-    return (
-      <div className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden" data-testid="rotate-screen">
-        <video
-          ref={videoRef}
-          src={rotateVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          data-testid="rotate-video"
-        />
       </div>
     );
   }

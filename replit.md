@@ -4,7 +4,7 @@
 Sitio web de marketing digital con una experiencia visual única que utiliza navegación horizontal en lugar del scroll vertical tradicional. El diseño presenta 4 pantallas con imágenes de fondo a pantalla completa que se desplazan lateralmente, creando una experiencia cinematográfica e inmersiva.
 
 ## Estado Actual del Proyecto
-**Última actualización**: Octubre 2025
+**Última actualización**: Octubre 15, 2025
 
 El proyecto actualmente tiene:
 - ✅ Navegación horizontal suave entre 4 pantallas
@@ -19,8 +19,8 @@ El proyecto actualmente tiene:
 - ✅ Diseño responsive para todos los dispositivos
 - ✅ Cursor grab/grabbing en modo arrastre
 - ✅ Respeto por prefers-reduced-motion
-- ✅ **Pantalla de rotación para móviles**: Video que indica girar el dispositivo a horizontal
 - ✅ **Texto overlay en primera pantalla**: Imagen con mensaje "Nie nudź jak wszyscy - Bądź zajebisty!"
+- ✅ **Servidor configurado**: Puerto por defecto 80 en producción
 
 ## Arquitectura Técnica
 
@@ -36,13 +36,6 @@ El proyecto actualmente tiene:
 2. **Pantalla 2**: Imagen 2_1760514742498.png  
 3. **Pantalla 3**: Imagen 3_1760514742498.png
 4. **Pantalla 4**: Imagen 4_1760514742497.png
-
-### Pantalla de Rotación (Solo Móvil)
-- **Condición**: Se muestra cuando el dispositivo es móvil (≤768px) Y está en orientación vertical
-- **Video**: mueveelmovil_1760542616133.mp4
-- **Comportamiento**: Loop automático hasta que el usuario gire el dispositivo a horizontal
-- **Detección**: Usa window.innerHeight > window.innerWidth para detectar portrait
-- Al girar a landscape, automáticamente se muestra la web principal
 
 ### Características de Navegación
 - **Desktop**: 
