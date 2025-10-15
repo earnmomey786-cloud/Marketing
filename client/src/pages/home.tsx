@@ -6,6 +6,7 @@ import image1 from '@assets/1_1760514742498.png';
 import image2 from '@assets/2_1760514742498.png';
 import image3 from '@assets/3_1760514742498.png';
 import image4 from '@assets/4_1760514742497.png';
+import textOverlay from '@assets/zajebistymarketing_1760541934438.png';
 
 const screens = [
   { id: 1, image: image1, alt: 'Pantalla 1' },
@@ -284,27 +285,17 @@ export default function Home() {
             
             {screen.id === 1 && (
               <div 
-                className={`absolute inset-0 flex items-start justify-end pt-8 md:pt-16 pr-6 md:pr-16 z-40 pointer-events-none transition-opacity duration-500 ${
+                className={`absolute top-8 md:top-16 right-6 md:right-16 z-40 pointer-events-none transition-opacity duration-500 ${
                   currentScreen === 0 ? 'opacity-100' : 'opacity-0'
                 }`}
                 aria-hidden={currentScreen !== 0}
               >
-                <div className="text-right max-w-xl px-4 animate-in fade-in slide-in-from-right-10 duration-700 delay-300">
-                  <h1 className="font-black text-4xl md:text-6xl lg:text-7xl leading-tight md:leading-tight lg:leading-tight">
-                    <span className="block text-[#d4ff00] drop-shadow-[0_0_30px_rgba(212,255,0,0.5)]">
-                      Nie nudź jak
-                    </span>
-                    <span className="block text-[#d4ff00] drop-shadow-[0_0_30px_rgba(212,255,0,0.5)]">
-                      wszyscy
-                    </span>
-                    <span className="relative inline-block mt-2 md:mt-4">
-                      <span className="absolute inset-0 bg-[#d4ff00] -skew-y-1 transform scale-105"></span>
-                      <span className="relative text-[#7b3ff2] px-4 md:px-6 py-1 md:py-2 block font-black uppercase tracking-tight drop-shadow-lg">
-                        BĄDŹ ZAJEBISTY!
-                      </span>
-                    </span>
-                  </h1>
-                </div>
+                <img 
+                  src={textOverlay} 
+                  alt="Nie nudź jak wszyscy - Bądź zajebisty!"
+                  className="w-64 md:w-96 lg:w-[500px] h-auto animate-in fade-in slide-in-from-right-10 duration-700 delay-300"
+                  data-testid="text-overlay"
+                />
               </div>
             )}
           </div>
