@@ -271,7 +271,7 @@ export default function Home() {
         {screens.map((screen) => (
           <div
             key={screen.id}
-            className="relative w-screen h-screen flex-shrink-0"
+            className="relative w-screen h-screen flex-shrink-0 overflow-hidden"
             data-testid={`screen-${screen.id}`}
           >
             <img
@@ -281,6 +281,32 @@ export default function Home() {
               loading={screen.id === 1 ? 'eager' : 'lazy'}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20 pointer-events-none" />
+            
+            {screen.id === 1 && (
+              <div 
+                className={`absolute inset-0 flex items-start justify-end pt-8 md:pt-16 pr-6 md:pr-16 z-40 pointer-events-none transition-opacity duration-500 ${
+                  currentScreen === 0 ? 'opacity-100' : 'opacity-0'
+                }`}
+                aria-hidden={currentScreen !== 0}
+              >
+                <div className="text-right max-w-xl px-4 animate-in fade-in slide-in-from-right-10 duration-700 delay-300">
+                  <h1 className="font-black text-4xl md:text-6xl lg:text-7xl leading-tight md:leading-tight lg:leading-tight">
+                    <span className="block text-[#d4ff00] drop-shadow-[0_0_30px_rgba(212,255,0,0.5)]">
+                      Nie nudź jak
+                    </span>
+                    <span className="block text-[#d4ff00] drop-shadow-[0_0_30px_rgba(212,255,0,0.5)]">
+                      wszyscy
+                    </span>
+                    <span className="relative inline-block mt-2 md:mt-4">
+                      <span className="absolute inset-0 bg-[#d4ff00] -skew-y-1 transform scale-105"></span>
+                      <span className="relative text-[#7b3ff2] px-4 md:px-6 py-1 md:py-2 block font-black uppercase tracking-tight drop-shadow-lg">
+                        BĄDŹ ZAJEBISTY!
+                      </span>
+                    </span>
+                  </h1>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
