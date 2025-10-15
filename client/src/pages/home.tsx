@@ -95,26 +95,37 @@ export default function Home() {
   }, [nextScreen, prevScreen]);
 
   useEffect(() => {
+    let wheelTimeout: NodeJS.Timeout | null = null;
+    
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       
+      if (wheelTimeout || isTransitioning) return;
+      
       const deltaX = e.deltaX;
       const deltaY = e.deltaY;
-      const threshold = 30;
+      const threshold = 20;
 
-      if (!isTransitioning) {
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          if (deltaX > threshold) {
-            nextScreen();
-          } else if (deltaX < -threshold) {
-            prevScreen();
-          }
+      let shouldNavigate = false;
+      let direction: 'next' | 'prev' | null = null;
+
+      if (Math.abs(deltaX) > threshold) {
+        shouldNavigate = true;
+        direction = deltaX > 0 ? 'next' : 'prev';
+      } else if (Math.abs(deltaY) > threshold) {
+        shouldNavigate = true;
+        direction = deltaY > 0 ? 'next' : 'prev';
+      }
+
+      if (shouldNavigate && direction) {
+        wheelTimeout = setTimeout(() => {
+          wheelTimeout = null;
+        }, 100);
+
+        if (direction === 'next') {
+          nextScreen();
         } else {
-          if (deltaY > threshold) {
-            nextScreen();
-          } else if (deltaY < -threshold) {
-            prevScreen();
-          }
+          prevScreen();
         }
       }
     };
@@ -127,6 +138,9 @@ export default function Home() {
     return () => {
       if (container) {
         container.removeEventListener('wheel', handleWheel);
+      }
+      if (wheelTimeout) {
+        clearTimeout(wheelTimeout);
       }
     };
   }, [nextScreen, prevScreen, isTransitioning]);
